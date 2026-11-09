@@ -1,5 +1,7 @@
 # Diagnóstico de carreira internacional
 
+**Use agora:** https://ingridslytherin.github.io/diagnostico-carreira/
+
 Ferramenta gratuita para devs brasileiros que querem uma **vaga remota em empresa estrangeira**. Você envia o currículo, responde algumas perguntas e recebe:
 
 - notas para o **currículo**, a **compatibilidade com uma vaga**, o **inglês escrito** e o **GitHub**;

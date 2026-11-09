@@ -1,5 +1,5 @@
 // Testes de ponta a ponta: abre index.html (diagnóstico com currículo) num Chrome headless, envia PDFs reais,
-// clica em "Gerar avaliação" e confere o resultado na página.
+// clica em "Gerar meu diagnóstico" e confere o resultado na página.
 // LanguageTool e GitHub são simulados (fetch falso) para o teste não depender de internet nem de limites.
 // O pdf.js vem do CDN, então é preciso internet. Rodar com: node --test testes/navegador.test.js
 const test = require("node:test");

@@ -65,8 +65,8 @@
       preencherGithub(r.texto);
       var nPal = (r.texto.match(/\S+/g) || []).length;
       status.textContent = nPal < 60
-        ? "PDF lido, mas quase não tem texto (" + nPal + " palavras): ele parece ser uma imagem. Clique em “Gerar avaliação” para ver o que isso significa."
-        : "PDF lido: " + r.paginas + " página(s). Confira o texto extraído e clique em “Gerar avaliação”.";
+        ? "PDF lido, mas quase não tem texto (" + nPal + " palavras): ele parece ser uma imagem. Clique em “Gerar meu diagnóstico” para ver o que isso significa."
+        : "PDF lido: " + r.paginas + " página(s). Confira o texto extraído e clique em “Gerar meu diagnóstico”.";
     } catch (e) {
       metaPdf = null;
       status.textContent = "Não consegui ler o PDF: " + e.message;
