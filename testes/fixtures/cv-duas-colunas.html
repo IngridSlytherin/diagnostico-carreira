@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>cv-duas-colunas</title>
+<style>body{font:10.5pt Arial,sans-serif;margin:30px;display:grid;grid-template-columns:200px 1fr;gap:28px;line-height:1.3}
+aside{background:#eef}h1{font-size:17pt;margin:0}h2{font-size:11.5pt;margin:12px 0 4px}ul{margin:3px 0;padding-left:16px}p{margin:2px 0}canvas{display:block;margin-bottom:10px}</style>
+</head><body>
+<aside>
+<canvas id="foto" width="160" height="160"></canvas>
+<h2>Contact</h2>
+<p>carlos@example.com</p>
+<p>linkedin.com/in/carlos</p>
+<p>Recife, Brazil</p>
+<h2>Skills</h2>
+<p>PHP</p><p>Laravel</p><p>JavaScript</p><p>Vue.js</p><p>MySQL</p><p>Docker</p><p>Git</p>
+<h2>Languages</h2>
+<p>Portuguese: Native</p><p>English: Intermediate</p>
+<h2>Education</h2>
+<p>Systems Analysis</p><p>UNINASSAU, 2017</p>
+</aside>
+<main>
+<h1>Carlos Lima</h1>
+<p>Back-End Developer</p>
+<h2>Summary</h2>
+<p>Back-end developer with 4 years of experience building web systems with PHP and Laravel for retail and logistics companies in Brazil.</p>
+<h2>Experience</h2>
+<p><strong>Back-End Developer, Loja Rápida</strong> · Feb 2022 – Present</p>
+<ul>
+<li>Built the order management API used by 40 stores across the Northeast region.</li>
+<li>Reduced checkout errors by 25% by adding validation and automated tests to the payment flow.</li>
+<li>Migrated legacy reports from raw SQL to Laravel queues, cutting generation time from 10 minutes to 40 seconds.</li>
+</ul>
+<p><strong>Web Developer, LogTech</strong> · Jan 2020 – Jan 2022</p>
+<ul>
+<li>Developed a delivery tracking dashboard in Vue.js consumed by 300 drivers every day.</li>
+<li>Integrated three carrier APIs, removing manual tracking work for the support team.</li>
+<li>Maintained the MySQL database and wrote nightly backup scripts with Docker and cron.</li>
+</ul>
+<h2>Projects</h2>
+<ul>
+<li>Created an open-source Laravel package for Brazilian address lookup with 1,200 downloads.</li>
+<li>Published a tutorial series on Laravel queues followed by 2,000 developers.</li>
+</ul>
+</main>
+<script>
+var c = document.getElementById("foto").getContext("2d");
+var g = c.createRadialGradient(80, 70, 10, 80, 80, 80);
+g.addColorStop(0, "#d9a"); g.addColorStop(1, "#635");
+c.fillStyle = g; c.fillRect(0, 0, 160, 160);
+c.fillStyle = "#fff"; c.beginPath(); c.arc(80, 65, 30, 0, 7); c.fill();
+for (var i = 0; i < 400; i++) { c.fillStyle = "rgba(" + (i % 255) + ",80,120,0.2)"; c.fillRect((i * 37) % 160, (i * 53) % 160, 3, 3); }
+</script>
+</body></html>

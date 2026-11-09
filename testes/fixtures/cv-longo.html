@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>cv-longo</title>
+<style>body{font:12pt Georgia,serif;margin:50px;line-height:1.6}h1{font-size:20pt}h2{font-size:14pt;margin-top:22px}</style>
+</head><body>
+<h1>Diego Alves</h1>
+<p>diego@example.com · linkedin.com/in/diegoalves · Porto Alegre, Brazil</p>
+<h2>Summary</h2>
+<p>Software engineer with 10 years of experience across many companies and technologies.</p>
+<h2>Experience</h2>
+<div id="exp"></div>
+<h2>Skills</h2>
+<p>Java, Spring, PHP, Laravel, JavaScript, React, Angular, PostgreSQL, Oracle, Docker, Kubernetes, AWS</p>
+<h2>Education</h2>
+<p>B.Sc. in Computer Engineering, UFRGS, 2014</p>
+<h2>Languages</h2>
+<p>English: Upper-intermediate</p>
+<script>
+var html = "";
+for (var i = 0; i < 9; i++) {
+  html += "<p><strong>Software Engineer, Company " + (i + 1) + "</strong> · Jan " + (2014 + i) + " – Dec " + (2015 + i) + "</p><ul>" +
+    "<li>Developed features for the main product using Java and Spring for internal teams.</li>" +
+    "<li>Improved the deployment process with Docker, reducing release time by 20%.</li>" +
+    "<li>Collaborated with designers and product managers to deliver new screens every sprint.</li>" +
+    "<li>Maintained legacy modules and fixed production bugs reported by customers.</li></ul>";
+}
+document.getElementById("exp").innerHTML = html;
+</script>
+</body></html>

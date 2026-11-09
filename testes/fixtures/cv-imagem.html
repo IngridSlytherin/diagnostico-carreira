@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>cv-imagem</title>
+<style>body{margin:30px}</style>
+</head><body>
+<!-- Simula um currículo escaneado: todo o texto está desenhado numa imagem, sem texto selecionável. -->
+<canvas id="c" width="700" height="900"></canvas>
+<script>
+var c = document.getElementById("c").getContext("2d");
+c.fillStyle = "#fff"; c.fillRect(0, 0, 700, 900);
+c.fillStyle = "#111"; c.font = "bold 28px Arial"; c.fillText("Ana Pereira", 30, 50);
+c.font = "16px Arial";
+var linhas = ["Front-End Developer · Curitiba, Brazil", "ana@example.com", "", "EXPERIENCE",
+  "Front-End Developer, Shop Co — 2021 – Present", "• Built the product catalog in React used by 8,000 customers.",
+  "• Reduced bundle size by 30% with code splitting.", "", "SKILLS", "React, TypeScript, CSS, Jest"];
+linhas.forEach(function (l, i) { c.fillText(l, 30, 100 + i * 30); });
+for (var i = 0; i < 300; i++) { c.fillStyle = "rgba(0,0,0,0.04)"; c.fillRect((i * 41) % 700, (i * 67) % 900, 2, 2); }
+</script>
+</body></html>

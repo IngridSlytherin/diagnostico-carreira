@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diagnóstico de carreira</title>
+<style>
+  :root { color-scheme: light dark; --bg: #f6f5f1; --card: #fff; --ink: #1d1f24; --muted: #6a6f7a; --line: #e4e2db; --accent: #2f5bea; --accent-soft: #e6ecfd;
+    --ok: #27834b; --ok-soft: #e3f3e8; --warn: #9a6100; --warn-soft: #fbf0d9; --bad: #b42318; --bad-soft: #fbe5e3; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #14161a; --card: #1d2026; --ink: #eceef2; --muted: #9aa0ab; --line: #2c3038; --accent: #7b9cff; --accent-soft: #232c45;
+      --ok: #6bc58a; --ok-soft: #1c3226; --warn: #e5b45a; --warn-soft: #3a2f17; --bad: #f08a80; --bad-soft: #3d1f1d; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 900px; margin: 0 auto; padding: 28px 16px 56px; }
+  h1 { margin: 0 0 8px; font-size: clamp(24px, 5vw, 34px); }
+  h2 { margin: 0 0 14px; font-size: 19px; }
+  h3 { margin: 22px 0 10px; font-size: 17px; }
+  p { margin: 0 0 14px; }
+  .muted, .hint { color: var(--muted); font-size: 14px; }
+  .card { margin-top: 16px; padding: 22px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; }
+  .notice { padding: 14px 16px; background: var(--accent-soft); border-radius: 10px; }
+  .etapa { display: inline-block; min-width: 26px; height: 26px; margin-right: 8px; border-radius: 99px; background: var(--accent); color: #fff; font-size: 14px; line-height: 26px; text-align: center; vertical-align: 2px; }
+  label { font-weight: 600; }
+  .field { display: grid; gap: 6px; margin-top: 12px; }
+  .fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .fields .field { margin-top: 0; }
+  .subtitulo { margin: 22px 0 10px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 16px; }
+  .questions { display: grid; gap: 16px; }
+  .question { display: grid; gap: 6px; }
+  input[type=text], input:not([type]), textarea, select { width: 100%; padding: 10px 12px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; font: inherit; }
+  textarea { min-height: 160px; resize: vertical; font-size: 14px; }
+  input[type=file] { font: inherit; max-width: 100%; }
+  .check { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; margin-top: 12px; }
+  .check input { margin-top: 5px; }
+  input:focus, textarea:focus, select:focus, button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  button, .back { display: inline-block; padding: 10px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--ink); font: inherit; font-weight: 600; text-decoration: none; cursor: pointer; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button:disabled { opacity: .6; cursor: progress; }
+  #status { min-height: 22px; margin-top: 10px; }
+  #resultados[hidden] { display: none; }
+  .placar { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+  .nota { padding: 14px; border: 1px solid var(--line); border-radius: 10px; }
+  .nota .valor { font-size: 30px; font-weight: 750; color: var(--accent); line-height: 1.1; }
+  .nota .rotulo { font-weight: 650; }
+  .bar { height: 8px; margin: 8px 0 4px; overflow: hidden; background: var(--line); border-radius: 99px; }
+  .bar span { display: block; height: 100%; background: var(--accent); border-radius: inherit; }
+  .auto-lista { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px 16px; }
+  .auto-item .score-line { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; font-weight: 600; }
+  .acao { padding: 14px 16px; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; margin-top: 12px; }
+  .acao.p1 { border-left-color: var(--bad); }
+  .acao.p2 { border-left-color: var(--warn); }
+  .acao h4 { margin: 0 0 6px; font-size: 16px; }
+  .acao ol { margin: 8px 0 0; padding-left: 22px; }
+  .acao li + li { margin-top: 4px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+  .tag { font-size: 12px; font-weight: 650; padding: 2px 8px; border-radius: 99px; background: var(--accent-soft); color: var(--ink); }
+  .tag.divergencia { background: var(--bad-soft); color: var(--bad); }
+  .lista-checks { list-style: none; padding: 0; margin: 0; }
+  .lista-checks li { display: grid; grid-template-columns: auto 1fr; gap: 10px; padding: 12px 0; border-top: 1px solid var(--line); }
+  .selo { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; height: fit-content; white-space: nowrap; }
+  .selo.ok { background: var(--ok-soft); color: var(--ok); }
+  .selo.aviso { background: var(--warn-soft); color: var(--warn); }
+  .selo.critico { background: var(--bad-soft); color: var(--bad); }
+  .selo.info { background: var(--accent-soft); color: var(--accent); }
+  .exemplos { margin: 6px 0 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-size: 13px; padding: 3px 9px; border-radius: 99px; border: 1px solid var(--line); }
+  .chip.tem { background: var(--ok-soft); color: var(--ok); border-color: transparent; }
+  .chip.falta { background: var(--bad-soft); color: var(--bad); border-color: transparent; }
+  .erro-lt { padding: 10px 0; border-top: 1px solid var(--line); font-size: 15px; }
+  .erro-lt mark { background: var(--warn-soft); color: var(--ink); padding: 0 2px; border-radius: 3px; }
+  .aviso-erro { padding: 12px 14px; border-radius: 10px; background: var(--warn-soft); margin-top: 12px; }
+  details summary { cursor: pointer; font-weight: 600; }
+  @media (max-width: 600px) { .fields { grid-template-columns: 1fr; } .card { padding: 17px; } }
+  @media print {
+    body { background: #fff; color: #111; }
+    main { max-width: none; padding: 0; }
+    .back, form, #resultados .actions { display: none !important; }
+    .card, .acao { break-inside: avoid; border-color: #bbb; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Diagnóstico de carreira internacional</h1>
+    <p class="muted">Envie seu currículo, responda algumas perguntas e receba um plano do que fazer primeiro para conseguir uma vaga remota no exterior.</p>
+    <p class="notice">O PDF é lido <strong>no seu navegador</strong> e o currículo não é guardado. Só as respostas das perguntas ficam salvas como rascunho neste navegador. Dados saem do seu computador apenas se você marcar a verificação de inglês (o texto vai para o LanguageTool, sem nome, e-mail, telefone e links) ou informar um usuário do GitHub (API pública do GitHub). As notas vêm de regras visíveis, não de uma IA, e não estimam suas chances de contratação.</p>
+  </header>
+
+  <form id="form-avaliador">
+    <section class="card" aria-labelledby="t-cv">
+      <h2 id="t-cv"><span class="etapa">1</span>Seu currículo</h2>
+      <div class="field">
+        <label for="arquivo">Envie o PDF</label>
+        <input type="file" id="arquivo" accept="application/pdf,.pdf">
+      </div>
+      <div class="field">
+        <label for="texto-cv">…ou cole o texto aqui</label>
+        <textarea id="texto-cv" placeholder="Cole o texto do currículo. Se você enviar o PDF, o texto extraído aparece aqui."></textarea>
+        <p class="hint" style="margin:0">O texto extraído do PDF é parecido com o que um ATS (sistema de triagem) “enxerga”. Se ele sair embaralhado aqui, sai embaralhado lá. Ainda não tem currículo? Pode pular esta etapa.</p>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="t-auto">
+      <h2 id="t-auto"><span class="etapa">2</span>Sua autoavaliação</h2>
+      <p class="hint">Responda com sinceridade. As respostas são cruzadas com o currículo: se você disser que mostra resultados, confiro se os bullets têm números. Respostas em branco não reduzem a nota.</p>
+
+      <div class="fields">
+        <div class="field"><label for="name">Como gostaria de ser chamado? <span class="muted">(opcional)</span></label><input id="name" name="name" autocomplete="given-name"></div>
+        <div class="field"><label for="role">Cargo ou área que busca</label><input id="role" name="role" placeholder="Ex.: Backend Developer, QA Engineer, Data Analyst"></div>
+        <div class="field"><label for="market">País, região ou tipo de empresa</label><input id="market" name="market" placeholder="Ex.: EUA, Europa, LATAM ou qualquer lugar"></div>
+        <div class="field">
+          <label for="level">Nível ou tipo de oportunidade desejada</label>
+          <select id="level" name="level">
+            <option value="">Não defini ainda</option>
+            <option>Estágio / entrada na área</option>
+            <option>Júnior</option>
+            <option>Pleno / intermediário</option>
+            <option>Sênior</option>
+            <option>Liderança</option>
+            <option>Outro ou flexível</option>
+          </select>
+        </div>
+      </div>
+
+      <h3 class="subtitulo">Currículo / perfil profissional</h3>
+      <div class="questions">
+        <div class="question"><label for="resume-current">Seu currículo ou perfil profissional está atualizado?</label><select id="resume-current" name="resumeCurrent"><option value="">Não avaliei</option><option value="1">Sim</option><option value="0.5">Em parte</option><option value="0">Ainda não</option></select></div>
+        <div class="question"><label for="resume-targeted">Você adapta o currículo para o tipo de vaga que busca?</label><select id="resume-targeted" name="resumeTargeted"><option value="">Não avaliei</option><option value="1">Sim</option><option value="0.5">Em parte</option><option value="0">Ainda não</option></select></div>
+        <div class="question"><label for="resume-evidence">As experiências mostram entregas, impacto ou resultados concretos?</label><select id="resume-evidence" name="resumeEvidence"><option value="">Não avaliei</option><option value="1">Sim</option><option value="0.5">Em parte</option><option value="0">Ainda não</option></select></div>
+      </div>
+
+      <h3 class="subtitulo">Projetos e presença profissional</h3>
+      <div class="questions">
+        <div class="question"><label for="portfolio-relevant">Você consegue mostrar pelo menos um projeto ou trabalho relevante para a área desejada?</label><select id="portfolio-relevant" name="portfolioRelevant"><option value="">Não avaliei</option><option value="1">Sim</option><option value="0.5">Tenho algo, mas não está pronto para mostrar</option><option value="0">Ainda não</option></select></div>
+        <div class="question"><label for="portfolio-explained">O projeto explica o problema, suas contribuições e as tecnologias usadas?</label><select id="portfolio-explained" name="portfolioExplained"><option value="">Não avaliei</option><option value="1">Sim</option><option value="0.5">Em parte</option><option value="0">Ainda não</option></select></div>
+        <div class="question"><label for="portfolio-demo">É fácil para outra pessoa ver, testar ou entender o projeto?</label><select id="portfolio-demo" name="portfolioDemo"><option value="">Não avaliei</option><option value="1">Sim, há demo ou instruções claras</option><option value="0.5">Dá para entender com algum esforço</option><option value="0">Ainda não</option></select></div>
+      </div>
+
+      <h3 class="subtitulo">Comunicação no idioma de trabalho</h3>
+      <div class="questions">
+        <div class="question"><label for="language-speaking">Como se sente em conversas ou reuniões de trabalho em inglês?</label><select id="language-speaking" name="languageSpeaking"><option value="">Prefiro não estimar</option><option value="0">Tenho muita dificuldade hoje</option><option value="0.25">Preciso de bastante apoio ou preparação</option><option value="0.5">Consigo tratar assuntos rotineiros</option><option value="0.75">Consigo trabalhar com conforto</option><option value="1">Consigo conduzir conversas complexas com confiança</option></select></div>
+        <div class="question"><label for="language-writing">Como se sente escrevendo mensagens, documentos ou atualizações de trabalho em inglês?</label><select id="language-writing" name="languageWriting"><option value="">Prefiro não estimar</option><option value="0">Tenho muita dificuldade hoje</option><option value="0.25">Preciso de bastante apoio ou preparação</option><option value="0.5">Consigo tratar assuntos rotineiros</option><option value="0.75">Consigo trabalhar com conforto</option><option value="1">Consigo comunicar temas complexos com confiança</option></select></div>
+      </div>
+
+      <h3 class="subtitulo">Preparação para processos seletivos</h3>
+      <div class="questions">
+        <div class="question"><label for="interview-examples">Você tem exemplos concretos de desafios e resultados para contar em entrevistas?</label><select id="interview-examples" name="interviewExamples"><option value="">Não avaliei</option><option value="1">Sim, tenho exemplos organizados</option><option value="0.5">Tenho alguns, mas preciso organizá-los</option><option value="0">Ainda não</option></select></div>
+        <div class="question"><label for="interview-technical">Você consegue explicar decisões e contribuições em um projeto técnico?</label><select id="interview-technical" name="interviewTechnical"><option value="">Não avaliei</option><option value="1">Sim, com clareza</option><option value="0.5">Consigo, mas preciso praticar</option><option value="0">Ainda não</option></select></div>
+        <div class="question"><label for="interview-practice">Com que frequência pratica entrevistas ou respostas em voz alta?</label><select id="interview-practice" name="interviewPractice"><option value="">Não avaliei</option><option value="1">Regularmente</option><option value="0.5">Ocasionalmente</option><option value="0">Nunca ou quase nunca</option></select></div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="t-extra">
+      <h2 id="t-extra"><span class="etapa">3</span>Extras <span class="muted">(opcionais)</span></h2>
+      <div class="field" style="margin-top:0">
+        <label for="texto-vaga">Uma vaga real que você quer</label>
+        <textarea id="texto-vaga" style="min-height:110px" placeholder="Cole o texto do anúncio para ver as palavras-chave que faltam e sinais de que a vaga aceita (ou não) o Brasil."></textarea>
+      </div>
+      <label class="check"><input type="checkbox" id="usar-lt">
+        <span><strong>Verificar o inglês do currículo com o LanguageTool</strong><br><span class="hint">Envia o texto do currículo, sem a primeira linha (provável nome), e-mails, telefones e links, para a API pública do LanguageTool. Limite do plano gratuito: cerca de 20 verificações por minuto.</span></span></label>
+      <div class="field">
+        <label for="github">Usuário do GitHub</label>
+        <input type="text" id="github" placeholder="ex.: octocat (preenchido sozinho se o link estiver no currículo)" autocomplete="off" spellcheck="false">
+        <p class="hint" style="margin:0">Consulta a API pública do GitHub (sem login, até 60 consultas por hora por rede). Lê o perfil, os repositórios e os READMEs dos 4 projetos principais.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="actions" style="margin-top:0">
+        <button class="primary" type="submit" id="gerar">Gerar meu diagnóstico</button>
+        <button type="button" id="limpar">Apagar tudo</button>
+      </div>
+      <p id="status" class="hint" role="status" aria-live="polite"></p>
+    </section>
+  </form>
+
+  <section id="resultados" class="card" hidden aria-labelledby="t-res">
+    <h2 id="t-res">Seu diagnóstico</h2>
+    <div id="conteudo"></div>
+    <div class="actions">
+      <button class="primary" type="button" id="baixar">Baixar relatório (.md)</button>
+      <button type="button" id="imprimir">Imprimir / salvar como PDF</button>
+    </div>
+  </section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+<script src="js/regras.js"></script>
+<script src="js/integracoes.js"></script>
+<script src="js/avaliador.js"></script>
+</body>
+</html>

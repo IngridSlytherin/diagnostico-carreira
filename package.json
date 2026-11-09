@@ -1,0 +1,11 @@
+{
+  "name": "diagnostico-carreira-internacional",
+  "private": true,
+  "description": "Diagnóstico de carreira internacional para devs: currículo, vaga, inglês e GitHub, no navegador",
+  "scripts": {
+    "test": "node --test testes/regras.test.js testes/navegador.test.js",
+    "test:regras": "node --test testes/regras.test.js",
+    "test:navegador": "node --test testes/navegador.test.js",
+    "fixtures": "node testes/gerar-fixtures.js"
+  }
+}
